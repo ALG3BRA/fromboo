@@ -71,5 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
       errorMessage_2.textContent = 'Ошибка: ' + error.message; // Выводим сообщение об ошибке в элемент errorMessage
     });
   });
+
+  document.getElementById('openTab').addEventListener('click', () => {
+    chrome.tabs.create({ url: chrome.runtime.getURL('tab.html') });
+  });
+
 });
 

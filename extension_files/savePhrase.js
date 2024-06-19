@@ -50,6 +50,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'popupData') {
         console.log('Данные из popup.js:', message.data);
         tokenStorage.setToken(message.data.access_token, message.data.exp);
+    } else if (message.type === 'getToken') {
+        sendResponse({ token: tokenStorage.getToken() });
+        return true; // Указываем, что ответ будет отправлен асинхронно
     }
 });
 

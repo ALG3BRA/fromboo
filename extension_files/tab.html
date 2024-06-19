@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Words</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="filter-container">
+      <div class="filter-group">
+        <label>
+          <input type="checkbox" id="favoritesOnly"> Только избранные
+        </label>
+      </div>
+      <div class="filter-group">
+        <label>Сортировка:</label>
+        <label>
+          <input type="radio" name="sortOrder" value="time" checked> По времени
+        </label>
+        <label>
+          <input type="radio" name="sortOrder" value="alphabet"> По алфавиту
+        </label>
+      </div>
+      <div class="filter-group">
+        <label for="partOfSpeechFilter">Часть речи:</label>
+        <select id="partOfSpeechFilter">
+          <option value="">Все</option>
+          <option value="ADJF">Прилагательное</option>
+          <option value="NOUN">Существительное</option>
+          <option value="VERB">Глагол</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="dateFilter">Дата:</label>
+        <input type="date" id="dateFilter">
+      </div>
+    </div>
+    <div id="wordList">
+      <!-- Блоки со словами будут добавляться динамически через JavaScript -->
+    </div>
+
+  </div>
+
+
+  <script src="tab.js"></script>
+</body>
+</html>

@@ -1,6 +1,8 @@
+import uuid
 from datetime import datetime
 from uuid import UUID
 
+import fastapi
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.exc import IntegrityError
 
@@ -92,7 +94,7 @@ async def get_user_words(
         raise HTTPException(status_code=503, detail=f"Database error: {err}")
 
 
-@user_router.post("/set-custom-translation")
+@user_router.patch("/set-custom-translation")
 async def set_custom_translation(
         data: CustomTranslation,
         word_dal: WordDAL = Depends(get_word_dal),
@@ -115,5 +117,33 @@ async def set_custom_translation(
                 time=datetime.utcnow()
             )
             return user_word_bundle
+    except IntegrityError as err:
+        raise HTTPException(status_code=503, detail=f"Database error: {err}")
+
+
+@user_router.delete("/delete-word")
+async def delete_user_word(
+        word_id: UUID,
+        word_dal: WordDAL = Depends(get_word_dal),
+        current_user: User = Depends(get_current_user_from_token)
+):
+    try:
+        async with word_dal.db_session.begin():
+            await word_dal.delete_user_bundle(current_user.user_id, word_id)
+            return
+    except IntegrityError as err:
+        raise HTTPException(status_code=503, detail=f"Database error: {err}")
+
+
+@user_router.patch("/change-favorite")
+async def change_is_favorite_for_word(
+        word_id: UUID,
+        is_favorite: bool = False,
+        word_dal: WordDAL = Depends(get_word_dal),
+        current_user: User = Depends(get_current_user_from_token)
+):
+    try:
+        async with word_dal.db_session.begin():
+            await word_dal.update_word_favorite(current_user.user_id, word_id, is_favorite)
     except IntegrityError as err:
         raise HTTPException(status_code=503, detail=f"Database error: {err}")

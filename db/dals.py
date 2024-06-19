@@ -172,6 +172,15 @@ class WordDAL:
             return True
         return False
 
+    async def update_word_favorite(self, user_id: int, word_id: UUID, is_favorite: bool):
+        stmt = select(UserWords).filter_by(user_id=user_id, word_id=word_id)
+        result = await self.db_session.execute(stmt)
+        user_word = result.scalars().first()
+        if user_word:
+            user_word.is_favorite = is_favorite
+        else:
+            raise IntegrityError(f"UserWord с user_id={user_id} и word_id={word_id} не найден")
+
 
 async def get_word_dal(db_session: AsyncSession = Depends(get_db)) -> AsyncGenerator[WordDAL, None]:
     yield WordDAL(db_session)
